@@ -1,6 +1,6 @@
-import 'package:flutter_cinemapedia/infrastructure/models/moviedb/movie_moviedb.dart';
 
-import '../../domain/entities/movie.dart';
+import '../../domain/domain.dart';
+import '../infrastructura.dart';
 
 class MovieMapper {
   static Movie movieDBToEntity(MovieMovieDB movieDB) => Movie(
