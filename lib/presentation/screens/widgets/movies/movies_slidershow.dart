@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../domain/domain.dart';
 
@@ -19,7 +20,7 @@ class MoviesSlidershow extends StatelessWidget {
         scale: 0.9,
         autoplay: true,
         pagination: SwiperPagination(
-          margin: const EdgeInsets.only(top:0),
+          margin: const EdgeInsets.only(top: 0),
           builder: DotSwiperPaginationBuilder(
             activeColor: colors.primary,
             color: colors.secondary,
@@ -30,7 +31,9 @@ class MoviesSlidershow extends StatelessWidget {
         itemCount: movies.length,
         itemBuilder: (context, index) {
           final movie = movies[index];
-          return _Slide(movie: movie);
+          return _Slide(movie: movie, onPressed: () {
+            context.push('/movies/${movie.id}');
+          });
         },
       ),
     );
@@ -39,7 +42,8 @@ class MoviesSlidershow extends StatelessWidget {
 
 class _Slide extends StatelessWidget {
   final Movie movie;
-  const _Slide({required this.movie});
+  final VoidCallback onPressed;
+  const _Slide({required this.movie, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +59,20 @@ class _Slide extends StatelessWidget {
         decoration: decoration,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            movie.posterPath,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress != null){
-                return DecoratedBox(
-                decoration: BoxDecoration(color: Colors.black12),);
-              }
-              return FadeIn(child: child);
-            },
+          child: GestureDetector(
+            onTap: onPressed,
+            child: Image.network(
+              movie.posterPath,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress != null) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(color: Colors.black12),
+                  );
+                }
+                return FadeIn(child: child);
+              },
+            ),
           ),
         ),
       ),
