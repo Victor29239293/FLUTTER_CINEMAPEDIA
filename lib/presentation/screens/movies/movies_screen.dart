@@ -69,7 +69,7 @@ class _MovieDetails extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  movie.posterPath,
+                  movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
                   width: size.width * 0.3,
                   fit: BoxFit.cover,
                 ),
@@ -200,7 +200,7 @@ class _CustomSliverAppBar extends StatelessWidget {
         background: Stack(
           children: [
             SizedBox.expand(
-              child: Image.network(movie.posterPath, fit: BoxFit.cover ,loadingBuilder: (context, child, loadingProgress) {
+              child: Image.network(movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png', fit: BoxFit.cover ,loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) return const SizedBox();
                 return child;
               },),

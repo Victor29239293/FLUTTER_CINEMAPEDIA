@@ -7,8 +7,8 @@ class Movie {
   final String originalTitle;
   final String overview;
   final double popularity;
-  final String posterPath;
-  final DateTime releaseDate;
+  final String? posterPath;
+  final String releaseDate;
   final String title;
   final bool video;
   final double voteAverage;

@@ -31,9 +31,12 @@ class MoviesSlidershow extends StatelessWidget {
         itemCount: movies.length,
         itemBuilder: (context, index) {
           final movie = movies[index];
-          return _Slide(movie: movie, onPressed: () {
-            context.push('/movies/${movie.id}');
-          });
+          return _Slide(
+            movie: movie,
+            onPressed: () {
+              context.push('/movies/${movie.id}');
+            },
+          );
         },
       ),
     );
@@ -43,6 +46,7 @@ class MoviesSlidershow extends StatelessWidget {
 class _Slide extends StatelessWidget {
   final Movie movie;
   final VoidCallback onPressed;
+
   const _Slide({required this.movie, required this.onPressed});
 
   @override
@@ -50,11 +54,12 @@ class _Slide extends StatelessWidget {
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.circular(20),
       boxShadow: const [
-        BoxShadow(color: Colors.black45, blurRadius: 10, offset: Offset(0, 5)),
+        BoxShadow(color: Colors.black45, blurRadius: 10, offset: Offset(0, 10)),
       ],
     );
+
     return Padding(
-      padding: EdgeInsets.only(bottom: 35),
+      padding: const EdgeInsets.only(bottom: 30),
       child: DecoratedBox(
         decoration: decoration,
         child: ClipRRect(
@@ -62,11 +67,11 @@ class _Slide extends StatelessWidget {
           child: GestureDetector(
             onTap: onPressed,
             child: Image.network(
-              movie.posterPath,
+              movie.backdropPath ?? '',
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) {
-                  return DecoratedBox(
+                  return const DecoratedBox(
                     decoration: BoxDecoration(color: Colors.black12),
                   );
                 }

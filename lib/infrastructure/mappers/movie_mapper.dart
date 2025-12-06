@@ -13,11 +13,11 @@ class MovieMapper {
     id: movieDB.id,
     originalLanguage: movieDB.originalLanguage,
     originalTitle: movieDB.originalTitle,
-    overview: movieDB.overview,
+    overview: movieDB.overview ?? 'No description available',
     popularity: movieDB.popularity,
     posterPath: movieDB.posterPath != ''
         ? 'https://image.tmdb.org/t/p/w500${movieDB.posterPath}'
-        : 'no-poster',
+        : 'https://www.hospitto.com/media/nopicture.gif',
     releaseDate: movieDB.releaseDate,
     title: movieDB.title,
     video: movieDB.video,

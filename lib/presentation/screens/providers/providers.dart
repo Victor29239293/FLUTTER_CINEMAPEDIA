@@ -8,3 +8,4 @@ export 'movies/movies_slidershow_provider.dart';
 export 'movies/initial_loading_provider.dart';
 
 export 'actors/actor_respository_provider.dart';
+export 'search/search_movies_provider.dart';
