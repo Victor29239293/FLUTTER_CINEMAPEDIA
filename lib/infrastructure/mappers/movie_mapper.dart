@@ -1,4 +1,3 @@
-
 import '../../domain/domain.dart';
 import '../infrastructura.dart';
 import '../models/moviedb/movie_details.dart';
@@ -25,7 +24,7 @@ class MovieMapper {
     voteCount: movieDB.voteCount,
   );
 
-    static Movie movieDetailsDBToEntity(MovieDetailsDbResponse movieDB) => Movie(
+  static Movie movieDetailsDBToEntity(MovieDetailsDbResponse movieDB) => Movie(
     adult: movieDB.adult,
     backdropPath: movieDB.backdropPath != ''
         ? 'https://image.tmdb.org/t/p/w500${movieDB.backdropPath}'
@@ -45,4 +44,13 @@ class MovieMapper {
     voteAverage: movieDB.voteAverage,
     voteCount: movieDB.voteCount,
   );
+
+  static MovieTrailer movieTrailerDBToEntity(MovieTrailerResponse movieDB) =>
+      MovieTrailer(
+        id: movieDB.results[0].id,
+        key: movieDB.results[0].key,
+        name: movieDB.results[0].name,
+        site: movieDB.results[0].site,
+        type: movieDB.results[0].type,
+      );
 }
