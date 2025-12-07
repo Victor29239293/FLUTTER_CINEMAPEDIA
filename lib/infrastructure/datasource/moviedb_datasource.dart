@@ -96,4 +96,12 @@ class MoviedbDatasource extends MovieDatasource {
         .toList();
     return movieTrailer;
   }
+
+
+  @override
+  Future<List<Movie>> getRecommendedMovies(String movieId) async {
+    final response = await dio.get('/movie/$movieId/recommendations');
+    if (response.statusCode != 200) throw Exception('Movie not found');
+    return _jsonToMovies(response.data);
+  }
 }
