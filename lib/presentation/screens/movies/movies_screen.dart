@@ -101,7 +101,7 @@ class _MovieDetails extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(movie.id.toString(), style: textStyle.titleLarge),
+                    Text(movie.title, style: textStyle.titleLarge),
                     Text(
                       movie.overview,
                       style: textStyle.bodyMedium,
@@ -137,7 +137,7 @@ class _MovieDetails extends StatelessWidget {
 
         // TODO: Mostrar Actores ListView
         FadeInRight(child: _ActorByMovies(movieID: movie.id.toString())),
-        SizedBox(height: 10),
+        // SizedBox(height: 10),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
@@ -147,10 +147,7 @@ class _MovieDetails extends StatelessWidget {
         ),
         SizedBox(height: 10),
         MovieTrailer(videoId: videoId),
-
         SizedBox(height: 10),
-
-        Column(children: [Placeholder(fallbackHeight: 200)]),
       ],
     );
   }
@@ -283,7 +280,7 @@ class _ActorByMovies extends ConsumerWidget {
     final actorsByMovie = ref.watch(actorMoviesProvider);
 
     if (actorsByMovie[movieID] == null) {
-      return const CircularProgressIndicator(strokeWidth: 2);
+      return const SizedBox();
     }
 
     final actors = actorsByMovie[movieID]!;
@@ -308,6 +305,17 @@ class _ActorByMovies extends ConsumerWidget {
                     width: 135,
                     height: 180,
                     fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress != null) {
+                        return Image.asset(
+                          'assets/loaders/tri-spinner.gif',
+                          width: 135,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                      return FadeIn(child: child);
+                    },
                   ),
                 ),
                 SizedBox(height: 5),

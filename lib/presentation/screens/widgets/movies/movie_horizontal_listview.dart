@@ -10,7 +10,6 @@ class MovieHorizontalListview extends StatefulWidget {
   final String? title;
   final String? subTitle;
   final VoidCallback? loadNextPage;
-  
 
   const MovieHorizontalListview({
     super.key,
@@ -65,9 +64,14 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
               physics: BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 final movie = widget.movies[index];
-                return FadeInRight(child: _Slide(movie: movie, onPressed: () {
-                  context.push('/movies/${movie.id}');
-                }));
+                return FadeInRight(
+                  child: _Slide(
+                    movie: movie,
+                    onPressed: () {
+                      context.push('/movies/${movie.id}');
+                    },
+                  ),
+                );
               },
             ),
           ),
@@ -85,9 +89,10 @@ class _Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
-      
+
       child: GestureDetector(
         onTap: onPressed,
         child: Column(
@@ -101,11 +106,15 @@ class _Slide extends StatelessWidget {
                 child: Image.network(
                   movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
                   width: 150,
+                  height: 225,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress != null) {
-                      return Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                      return Image.asset(
+                        'assets/loaders/tri-spinner.gif',
+                        width: 135,
+                        height: 200,
+                        fit: BoxFit.cover,
                       );
                     }
                     return FadeIn(child: child);
@@ -125,14 +134,14 @@ class _Slide extends StatelessWidget {
                 style: textStyles.titleSmall,
               ),
             ),
-        
+
             //*Rating
             Row(
               children: [
                 Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
                 const SizedBox(width: 3),
                 Text(
-                  HumanFormats.number(movie.voteAverage,1),
+                  HumanFormats.number(movie.voteAverage, 1),
                   style: textStyles.bodyMedium?.copyWith(
                     color: Colors.yellow.shade800,
                   ),
