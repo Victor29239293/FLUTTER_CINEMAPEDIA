@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../screens/providers/providers.dart';
@@ -29,7 +27,6 @@ class HomeViewState extends ConsumerState<HomeView> {
     
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
-    final popularMovies = ref.watch(popularMoviesProvider);
     final upComingMovies = ref.watch(upComingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
@@ -51,13 +48,6 @@ class HomeViewState extends ConsumerState<HomeView> {
                   loadNextPage: () => ref
                       .read(nowPlayingMoviesProvider.notifier)
                       .loadNextPage(),
-                ),
-
-                MovieHorizontalListview(
-                  movies: popularMovies,
-                  title: 'Populares',
-                  loadNextPage: () =>
-                      ref.read(popularMoviesProvider.notifier).loadNextPage(),
                 ),
                 MovieHorizontalListview(
                   movies: upComingMovies,

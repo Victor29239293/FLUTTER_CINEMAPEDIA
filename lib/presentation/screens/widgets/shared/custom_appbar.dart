@@ -20,9 +20,10 @@ class CustomAppbar extends ConsumerWidget {
     );
 
     return SafeArea(
+      
       bottom: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: SizedBox(
           width: double.infinity,
           child: Row(
@@ -41,8 +42,9 @@ class CustomAppbar extends ConsumerWidget {
                     context: context,
                     delegate: SearchMovieDelegate(
                       initialMovies: searchMovies,
-                       searchMovies: ref.read(
-                        searchMoviesProvider.notifier).searchMoviesByQuery,
+                      searchMovies: ref
+                          .read(searchMoviesProvider.notifier)
+                          .searchMoviesByQuery,
                     ),
                   ).then((movie) {
                     if (movie == null) return;

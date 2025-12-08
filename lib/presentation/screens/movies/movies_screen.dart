@@ -106,6 +106,7 @@ class _MovieDetails extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(movie.title, style: textStyle.titleLarge),
+                    Text(movie.releaseDate, style: textStyle.bodySmall),
                     Text(
                       movie.overview,
                       style: textStyle.bodyMedium,
@@ -162,6 +163,7 @@ class _MovieDetails extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
+        SizedBox(height: 10),
         _RecommendedByMovies(movieID: movie.id.toString()),
       ],
     );
@@ -323,7 +325,7 @@ class _ActorByMovies extends ConsumerWidget {
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress != null) {
                         return Image.asset(
-                          'assets/loaders/tri-spinner.gif',
+                          'assets/loaders/bottle-loader.gif',
                           width: 135,
                           height: 150,
                           fit: BoxFit.cover,
@@ -356,7 +358,6 @@ class _ActorByMovies extends ConsumerWidget {
   }
 }
 
-
 class _RecommendedByMovies extends ConsumerWidget {
   final String movieID;
   const _RecommendedByMovies({required this.movieID});
@@ -365,11 +366,34 @@ class _RecommendedByMovies extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final recommendedByMovie = ref.watch(recommendedMoviesProvider);
 
-    if (recommendedByMovie[movieID] == null) {
-      return const SizedBox();
-    }
-
     final recommended = recommendedByMovie[movieID]!;
+
+    if (recommended.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            height: 200,
+            width: double.infinity,
+            color: Colors.grey[300],
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.movie_outlined, size: 64, color: Colors.grey[600]),
+                  SizedBox(height: 8),
+                  Text(
+                    'No hay películas recomendadas',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       height: 300,
       child: ListView.builder(
@@ -377,12 +401,14 @@ class _RecommendedByMovies extends ConsumerWidget {
         itemCount: recommended.length,
         itemBuilder: (context, index) {
           final movie = recommended[index];
+
           return Container(
             padding: EdgeInsets.all(8),
             width: 135,
             margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -398,7 +424,7 @@ class _RecommendedByMovies extends ConsumerWidget {
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress != null) {
                           return Image.asset(
-                            'assets/loaders/tri-spinner.gif',
+                            'assets/loaders/bottle-loader.gif',
                             width: 135,
                             height: 150,
                             fit: BoxFit.cover,
@@ -413,13 +439,6 @@ class _RecommendedByMovies extends ConsumerWidget {
                 Text(
                   movie.title,
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-
-                Text(
-                  movie.releaseDate,
-                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),

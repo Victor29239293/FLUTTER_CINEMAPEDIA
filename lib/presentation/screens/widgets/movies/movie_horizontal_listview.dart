@@ -111,9 +111,9 @@ class _Slide extends StatelessWidget {
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress != null) {
                       return Image.asset(
-                        'assets/loaders/tri-spinner.gif',
-                        width: 135,
-                        height: 200,
+                        'assets/loaders/bottle-loader.gif',
+                        width: 150,
+                        height: 225,
                         fit: BoxFit.cover,
                       );
                     }

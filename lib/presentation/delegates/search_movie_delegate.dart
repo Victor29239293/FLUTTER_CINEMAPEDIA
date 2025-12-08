@@ -28,10 +28,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     isLoadingStreamController.add(true);
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      // if (query.isEmpty) {
-      //   debounceMovies.add([]);
-      //   return;
-      // }
+
       final movies = await searchMovies?.call(query) ?? [];
       debounceMovies.add(movies);
       initialMovies = movies;
@@ -158,7 +155,14 @@ class _MovieItem extends StatelessWidget {
                 child: Image.network(
                   movie.posterPath ?? '',
                   loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
+                    if (loadingProgress != null) {
+                      return Image.asset(
+                      'assets/loaders/bottle-loader.gif',
+                      fit: BoxFit.cover,
+                      width: size.width * 0.2,
+                      height: 150,
+                    );
+                    }
                     return FadeIn(child: child);
                   },
                 ),
