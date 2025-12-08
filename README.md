@@ -8,21 +8,32 @@ Flutter Cinemapedia es una app demostrativa construida con Flutter que permite b
 
 **Capturas:**
 
-- **Pantalla principal:**
+**Capturas (galería 2x2):**
 
-  ![Home](assets/images/home.png)
-
-- **Búsqueda de películas:**
-
-  ![Buscar](assets/images/search_movies.png)
-
-- **Detalle de película (1):**
-
-  ![Detalle](assets/images/movie_details.png)
-
-- **Detalle de película (2):**
-
-  ![Detalle 2](assets/images/movie_details2.png)
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" style="padding:8px">
+        <img src="assets/images/home.png" alt="Home" width="360px" />
+        <div><strong>Pantalla principal</strong></div>
+      </td>
+      <td align="center" style="padding:8px">
+        <img src="assets/images/search_movies.png" alt="Buscar" width="360px" />
+        <div><strong>Búsqueda de películas</strong></div>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" style="padding:8px">
+        <img src="assets/images/movie_details.png" alt="Detalle" width="360px" />
+        <div><strong>Detalle (1)</strong></div>
+      </td>
+      <td align="center" style="padding:8px">
+        <img src="assets/images/movie_details2.png" alt="Detalle 2" width="360px" />
+        <div><strong>Detalle (2)</strong></div>
+      </td>
+    </tr>
+  </table>
+</div>
 
 **Requisitos**:
 
