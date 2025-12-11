@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,32 +11,34 @@ class MoviesSlidershow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return SizedBox(
-      height: 215,
-      width: double.infinity,
-      child: Swiper(
-        viewportFraction: 0.8,
-        scale: 0.9,
-        autoplay: true,
-        pagination: SwiperPagination(
-          margin: const EdgeInsets.only(top: 0),
-          builder: DotSwiperPaginationBuilder(
-            activeColor: colors.primary,
-            color: colors.secondary,
-            size: 8,
-            activeSize: 10,
+    return RepaintBoundary(
+      child: SizedBox(
+        height: 215,
+        width: double.infinity,
+        child: Swiper(
+          viewportFraction: 0.8,
+          scale: 0.9,
+          autoplay: true,
+          pagination: SwiperPagination(
+            margin: const EdgeInsets.only(top: 0),
+            builder: DotSwiperPaginationBuilder(
+              activeColor: colors.primary,
+              color: colors.secondary,
+              size: 8,
+              activeSize: 10,
+            ),
           ),
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            final movie = movies[index];
+            return _Slide(
+              movie: movie,
+              onPressed: () {
+                context.push('/movies/${movie.id}');
+              },
+            );
+          },
         ),
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          final movie = movies[index];
-          return _Slide(
-            movie: movie,
-            onPressed: () {
-              context.push('/movies/${movie.id}');
-            },
-          );
-        },
       ),
     );
   }
@@ -69,6 +70,8 @@ class _Slide extends StatelessWidget {
             child: Image.network(
               movie.backdropPath ?? '',
               fit: BoxFit.cover,
+              cacheHeight: 215,
+              cacheWidth: 400,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) {
                   return Image.asset(
@@ -76,9 +79,8 @@ class _Slide extends StatelessWidget {
                     width: 150,
                     fit: BoxFit.cover,
                   );
-                  //
                 }
-                return FadeIn(child: child);
+                return child;
               },
             ),
           ),

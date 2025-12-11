@@ -61,17 +61,10 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
               controller: scrollController,
               itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 final movie = widget.movies[index];
-                return FadeInRight(
-                  child: _Slide(
-                    movie: movie,
-                    onPressed: () {
-                      context.push('/movies/${movie.id}');
-                    },
-                  ),
-                );
+                return _Slide(movie: movie);
               },
             ),
           ),
@@ -83,8 +76,8 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
 
 class _Slide extends StatelessWidget {
   final Movie movie;
-  final VoidCallback onPressed;
-  const _Slide({required this.movie, required this.onPressed});
+
+  const _Slide({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -93,68 +86,72 @@ class _Slide extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
 
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //*Imagen
-            SizedBox(
-              width: 150,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
-                  width: 150,
-                  height: 225,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress != null) {
-                      return Image.asset(
-                        'assets/loaders/bottle-loader.gif',
-                        width: 150,
-                        height: 225,
-                        fit: BoxFit.cover,
-                      );
-                    }
-                    return FadeIn(child: child);
-                  },
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //*Imagen
+          SizedBox(
+            width: 150,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
+                width: 150,
+                height: 225,
+                fit: BoxFit.cover,
+                cacheHeight: 225,
+                cacheWidth: 150,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) {
+                    return Image.asset(
+                      'assets/loaders/bottle-loader.gif',
+                      width: 150,
+                      height: 225,
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/home/0/movies/${movie.id}');
+                    },
+                    child: FadeIn(child: child),
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 5),
-            //*Titulo
-            SizedBox(
-              width: 150,
-              child: Text(
-                movie.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
-                style: textStyles.titleSmall,
-              ),
+          ),
+          const SizedBox(height: 5),
+          //*Titulo
+          SizedBox(
+            width: 150,
+            child: Text(
+              movie.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.start,
+              style: textStyles.titleSmall,
             ),
+          ),
 
-            //*Rating
-            Row(
-              children: [
-                Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
-                const SizedBox(width: 3),
-                Text(
-                  HumanFormats.number(movie.voteAverage, 1),
-                  style: textStyles.bodyMedium?.copyWith(
-                    color: Colors.yellow.shade800,
-                  ),
+          //*Rating
+          Row(
+            children: [
+              Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
+              const SizedBox(width: 3),
+              Text(
+                HumanFormats.number(movie.voteAverage, 1),
+                style: textStyles.bodyMedium?.copyWith(
+                  color: Colors.yellow.shade800,
                 ),
-                const SizedBox(width: 20),
-                Text(
-                  '${HumanFormats.number(movie.popularity)}k',
-                  style: textStyles.bodySmall,
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(width: 20),
+              Text(
+                '${HumanFormats.number(movie.popularity)}k',
+                style: textStyles.bodySmall,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

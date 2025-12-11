@@ -1,5 +1,6 @@
 import 'package:flutter_cinemapedia/presentation/screens/providers/movies/movies_repository_provider.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../domain/domain.dart';
 
 final movieTrailerProvider =

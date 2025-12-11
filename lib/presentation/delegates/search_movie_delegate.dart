@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../config/helpers/human_formats.dart';
 import '../../domain/domain.dart';
 
@@ -143,7 +144,9 @@ class _MovieItem extends StatelessWidget {
     final textStyles = Theme.of(context).textTheme;
 
     return GestureDetector(
-      onTap: () => onMovieTap(context, movie),
+      onTap: () {
+        context.push('/home/0/movies/${movie.id}');
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
@@ -181,9 +184,8 @@ class _MovieItem extends StatelessWidget {
                     maxLines: 2,
                   ),
                   Text(
-                    (movie.overview.trim().isEmpty)
-                        ? 'No description available'
-                        : movie.overview,
+
+                    movie.overview ?? 'No description available',
                     style: textStyles.bodySmall,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,

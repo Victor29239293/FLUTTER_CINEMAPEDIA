@@ -1,52 +1,32 @@
-import 'package:flutter_cinemapedia/presentation/views/home_views/popular_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../presentation/screens/screens.dart';
-import '../../presentation/views/views.dart';
 
 final appRouter = GoRouter(
+  initialLocation: '/home/0',
   routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return HomeScreen(childView: child);
+    GoRoute(
+      path: '/home/:page',
+      name: HomeScreen.name,
+      builder: (context, state) {
+        final pageIndex = int.parse(state.pathParameters['page'] ?? '0');
+        if (pageIndex < 0 || pageIndex > 2) {
+          return HomeScreen(pageIndex: 0);
+        }
+        return HomeScreen(pageIndex: pageIndex);
       },
       routes: [
         GoRoute(
-          path: '/',
+          path: 'movies/:movieID',
+          name: MoviesScreen.name,
           builder: (context, state) {
-            return HomeView();
-          },
-          routes: [
-            GoRoute(
-              path: 'movies/:movieID',
-              name: MoviesScreen.name,
-              builder: (context, state) {
-                final movieID = state.pathParameters['movieID'] ?? 'no-id';
-                return MoviesScreen(movieID: movieID);
-              },
-            ),
-          ],
-        ),
-        GoRoute(
-          path: '/popular',
-          builder: (context, state) {
-            return PopularView();
-          },
-        ),
-        GoRoute(
-          path: '/favorites',
-          builder: (context, state) {
-            return FavoriteView();
+            final movieID = state.pathParameters['movieID'] ?? 'no-id';
+            return MoviesScreen(movieID: movieID);
           },
         ),
       ],
     ),
-    // GoRoute(
-    //   path: '/',
-    //   name: HomeScreen.name,
-    //   builder: (_, __) =>  HomeScreen(childView: HomeView(),),
-    //   routes: [
-    //
-    //   ],
-    // ),
+    GoRoute(path: '/',
+    redirect: (_,_) => '/home/0',
+    )
   ],
 );

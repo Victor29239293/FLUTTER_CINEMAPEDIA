@@ -5,7 +5,7 @@ class Movie {
   final int id;
   final String originalLanguage;
   final String originalTitle;
-  final String overview;
+  final String? overview;
   final double popularity;
   final String? posterPath;
   final String releaseDate;

@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cinemapedia/presentation/screens/providers/actors/actors_provider.dart';
+import 'package:flutter_cinemapedia/presentation/screens/providers/storage/favorite_movies_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -8,6 +9,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../domain/domain.dart';
 import '../providers/movies/movie_info_provider.dart';
 import '../providers/movies/movie_trailer_provider.dart';
+import '../providers/storage/is_favorite_provider.dart';
 
 class MoviesScreen extends ConsumerStatefulWidget {
   static const name = 'movies_screen';
@@ -108,7 +110,7 @@ class _MovieDetails extends StatelessWidget {
                     Text(movie.title, style: textStyle.titleLarge),
                     Text(movie.releaseDate, style: textStyle.bodySmall),
                     Text(
-                      movie.overview,
+                      movie.overview ?? 'No description available',
                       style: textStyle.bodyMedium,
                       maxLines: 10,
                       overflow: TextOverflow.ellipsis,
@@ -451,18 +453,36 @@ class _RecommendedByMovies extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
     return SliverAppBar(
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
+      actions: [
+        IconButton(
+          onPressed: () async {
+            ref
+                .read(favoriteMoviesProvider.notifier)
+                .toggleFavoriteMovie(movie);
+
+            ref.invalidate(isFavoriteProvider(movie.id));
+          },
+          icon: isFavoriteFuture.when(
+            data: (isFavorite) => isFavorite
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_border),
+            loading: () => const CircularProgressIndicator(),
+            error: (_, __) => const Icon(Icons.error_outline),
+          ),
+        ),
+      ],
 
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
@@ -496,7 +516,22 @@ class _CustomSliverAppBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
-                    stops: [0.0, 0.4],
+                    // end: Alignment.bottomRight,
+                    stops: [0.0, 0.5],
+                    colors: [Colors.black87, Colors.transparent],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox.expand(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    // end: Alignment.bottomRight,
+                    stops: [0.0, 0.3],
                     colors: [Colors.black87, Colors.transparent],
                   ),
                 ),
