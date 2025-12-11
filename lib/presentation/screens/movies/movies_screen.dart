@@ -10,6 +10,7 @@ import '../../../domain/domain.dart';
 import '../providers/movies/movie_info_provider.dart';
 import '../providers/movies/movie_trailer_provider.dart';
 import '../providers/storage/is_favorite_provider.dart';
+import '../widgets/shared/shimmer_loading.dart';
 
 class MoviesScreen extends ConsumerStatefulWidget {
   static const name = 'movies_screen';
@@ -97,6 +98,16 @@ class _MovieDetails extends StatelessWidget {
                   movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
                   width: size.width * 0.3,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return FadeIn(child: child);
+                    }
+
+                    return ShimmerLoading(
+                      width: size.width * 0.3,
+                      height: size.width * 0.45,
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 10),
@@ -492,8 +503,11 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 movie.posterPath ?? 'https://i.stack.imgur.com/GNhxO.png',
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) return const SizedBox();
-                  return child;
+                  if (loadingProgress == null) {
+                    return FadeIn(child: child);
+                  }
+
+                  return ShimmerLoading(width: 150, height: 225);
                 },
               ),
             ),

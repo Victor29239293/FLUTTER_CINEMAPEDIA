@@ -2,8 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cinemapedia/config/helpers/human_formats.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../domain/domain.dart';
+import '../shared/shimmer_loading.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
@@ -85,7 +85,6 @@ class _Slide extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -102,19 +101,39 @@ class _Slide extends StatelessWidget {
                 cacheHeight: 225,
                 cacheWidth: 150,
                 loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return Image.asset(
-                      'assets/loaders/bottle-loader.gif',
-                      width: 150,
-                      height: 225,
-                      fit: BoxFit.cover,
+                  if (loadingProgress == null) {
+                    return GestureDetector(
+                      onTap: () {
+                        context.push('/home/0/movies/${movie.id}');
+                      },
+                      child: FadeIn(child: child),
                     );
                   }
+
                   return GestureDetector(
                     onTap: () {
                       context.push('/home/0/movies/${movie.id}');
                     },
-                    child: FadeIn(child: child),
+                    child: ShimmerLoading(width: 150, height: 225),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/home/0/movies/${movie.id}');
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 225,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   );
                 },
               ),
@@ -185,3 +204,4 @@ class _Title extends StatelessWidget {
     );
   }
 }
+
