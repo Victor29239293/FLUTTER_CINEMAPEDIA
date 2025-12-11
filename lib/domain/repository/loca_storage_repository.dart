@@ -3,5 +3,5 @@ import '../entities/movie.dart';
 abstract class LocalStorageRepository {
   Future<void> toggleFavoriteMovie(Movie movie);
   Future<bool> isFavoriteMovie(int movieId);
-  Future<List<String>> getFavoriteMovies({int limit = 10, int offset = 0});
+  Future<List<Movie>> getFavoriteMovies({int limit = 10, int offset = 0});
 }

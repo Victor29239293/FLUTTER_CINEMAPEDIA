@@ -8,7 +8,7 @@ class DriftDatasource extends LocalStorageDatasource {
   DriftDatasource([AppDatabase? database]) : database = database ?? db;
 
   @override
-  Future<List<String>> getFavoriteMovies({
+  Future<List<Movie>> getFavoriteMovies({
     int limit = 10,
     int offset = 0,
   }) async {
@@ -40,7 +40,7 @@ class DriftDatasource extends LocalStorageDatasource {
         )
         .toList();
 
-    return movies.map((e) => e.posterPath ?? '').toList();
+    return movies;
   }
 
   @override

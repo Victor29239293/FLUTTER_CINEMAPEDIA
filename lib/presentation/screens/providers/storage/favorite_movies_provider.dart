@@ -16,18 +16,40 @@ class FavoriteMoviesNotifier extends StateNotifier<Map<int, Movie>> {
 
   FavoriteMoviesNotifier({required this.localStorageRepository}) : super({});
 
+  Future<List<Movie>> loadNextPage() async {
+    final movies = await localStorageRepository.getFavoriteMovies(
+      limit: 10,
+      offset: page * 10,
+    );
+
+    page++;
+    final tempMovie = <int, Movie>{};
+    for (final movie in movies) {
+      tempMovie[movie.id] = movie;
+    }
+
+    state = {...state, ...tempMovie};
+    return movies;
+  }
+
   Future<void> toggleFavoriteMovie(Movie movie) async {
-    final isfavorite = await localStorageRepository.isFavoriteMovie(movie.id);
+    try {
+      final isFavorite = await localStorageRepository.isFavoriteMovie(movie.id);
 
-    await localStorageRepository.toggleFavoriteMovie(movie);
+      // Realizar la operación en base de datos
+      await localStorageRepository.toggleFavoriteMovie(movie);
 
-    if (isfavorite) {
-      state.remove(movie.id);
-      state = {...state};
-      return;
-    } 
-
-    state = {...state, movie.id: movie};
-    
+      // Actualizar el estado después de guardar en la base de datos
+      if (isFavorite) {
+        // Si era favorito, lo removemos del estado
+        state = {...state}..remove(movie.id);
+      } else {
+        // Si no era favorito, lo agregamos al estado
+        state = {...state, movie.id: movie};
+      }
+    } catch (e) {
+      print('Error toggling favorite: $e');
+      rethrow;
+    }
   }
 }

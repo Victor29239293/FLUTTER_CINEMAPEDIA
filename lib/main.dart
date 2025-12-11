@@ -18,6 +18,9 @@ Future<void> main() async {
   //         title: 'Mi primera pelicula',
   //       ),
   //     );
+
+  
+
   final moviesQuery = await db.select(db.favoriteMovies).get();
   print(moviesQuery);
   await dotenv.load(fileName: ".env");
